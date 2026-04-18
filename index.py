@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 import aiohttp
 
-load_dotenv()
+load_dotenv('config.env')
 
 CHANNEL_ID = []  # e.g. [123456789012345678, 987654321098765432]; empty = no reaction
 
@@ -15,6 +15,7 @@ AI_API_KEY = os.getenv('AI_API_KEY')
 AI_API_MODEL = os.getenv('AI_API_MODEL')
 AI_API_URL = os.getenv('AI_API_URL')
 AI_SYSTEM_PROMPT = os.getenv('AI_SYSTEM_PROMPT')
+BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 @bot.event
 async def on_message(message):
@@ -57,4 +58,7 @@ async def on_message(message):
 
         await message.reply(reply)
 
-bot.run(os.getenv('BOT_TOKEN'))
+if not BOT_TOKEN:
+    raise RuntimeError("BOT_TOKEN is not set in config.env")
+
+bot.run(BOT_TOKEN)
