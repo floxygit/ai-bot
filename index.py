@@ -6,6 +6,8 @@ import aiohttp
 
 load_dotenv()
 
+CHANNEL_ID = []  # e.g. [123456789012345678, 987654321098765432]; empty = no reaction
+
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents=intents, help_command=None)
 
@@ -17,6 +19,8 @@ AI_SYSTEM_PROMPT = os.getenv('AI_SYSTEM_PROMPT')
 @bot.event
 async def on_message(message):
     if message.author.bot:
+        return
+    if CHANNEL_ID and message.channel.id not in CHANNEL_ID:
         return
     if message.content.startswith(f'<@!{bot.user.id}>') or message.content.startswith(f'<@{bot.user.id}>'):
         content = message.content.split(maxsplit=1)
