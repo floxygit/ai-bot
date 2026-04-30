@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord import app_commands
 import os
 from dotenv import load_dotenv
 import aiohttp
@@ -36,6 +37,18 @@ def save_history(data):
     os.makedirs(os.path.dirname(CHAT_HISTORY_FILE), exist_ok=True)
     with open(CHAT_HISTORY_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+
+@bot.tree.command(name="who-made", description="Who made the Bot.")
+async def who_made(interaction: discord.Interaction):
+    await interaction.response.send_message(
+        "This bot is made by **floxxy0** from https://github.com/floxygit/ai-bot",
+        ephemeral=True
+    )
+
+@bot.event
+async def on_ready():
+    await bot.tree.sync()
+    print(f"Logged in as {bot.user}")
 
 @bot.event
 async def on_message(message):
